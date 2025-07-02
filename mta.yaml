@@ -28,6 +28,7 @@ modules:
     requires:
       - name: my_sf_ent-connectivity
       - name: my_sf_ent-destination
+      - name: my_sf_ent-db
 
   - name: my_sf_ent-app-deployer
     type: com.sap.application.content
@@ -41,7 +42,13 @@ modules:
       requires:
 
 
-
+  - name: my_sf_ent-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: my_sf_ent-db
 resources:
   - name: my_sf_ent-connectivity
     type: org.cloudfoundry.managed-service
@@ -53,8 +60,31 @@ resources:
     parameters:
       service: destination
       service-plan: lite
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: my_sf_ent-srv-api
+                URL: ~{srv-api/srv-url}
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+              - Name: ui5
+                URL: https://ui5.sap.com
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
   - name: my_sf_ent-html5-repo-host
     type: org.cloudfoundry.managed-service
     parameters:
       service: html5-apps-repo
       service-plan: app-host
+  - name: my_sf_ent-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared

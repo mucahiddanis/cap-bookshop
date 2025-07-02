@@ -21,7 +21,11 @@
     "requires": {
       "connectivity": true,
       "destinations": true,
-      "html5-repo": true
+      "html5-repo": true,
+      "db": {
+        "kind": "sqlite",
+        "credentials": { "url": "db/my-bookshop.sqlite" }
+      }
     }
   }
 }

@@ -1,0 +1,28 @@
+@BASE_URL=http://localhost:4004/odata/v4
+
+### GET Books
+GET http://localhost:4004/odata/v4/catalog/Books
+
+### GET Authors
+GET {{BASE_URL}}/catalog/Authors
+
+### GET Author
+GET {{BASE_URL}}/catalog/Authors(101)
+
+### GET Books By Author
+GET {{BASE_URL}}/catalog/Authors(150)/books
+
+### GET Author and Author's Books
+GET {{BASE_URL}}/catalog/Authors(150)?$expand=books
+
+### Update Stock for Book
+PATCH  {{BASE_URL}}/catalog/Books(271)
+Content-Type: application/json
+
+{ "stock": 10 }
+
+### Order a Book
+POST {{BASE_URL}}/catalog/Orders
+Content-Type: application/json
+
+{ "book_ID": 271, "amount": 7 }
